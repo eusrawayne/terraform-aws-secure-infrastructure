@@ -1,0 +1,87 @@
+# ============================================================================
+# Example Terraform Variables File
+# ============================================================================
+# Copy this file to 'terraform.tfvars' and update values for your deployment
+# DO NOT commit terraform.tfvars to version control (keep it in .gitignore)
+# ============================================================================
+
+# AWS Region
+aws_region = "us-east-1"
+
+# Project Configuration
+project_name = "secure-infra"
+environment  = "dev"  # Options: dev, staging, prod
+
+# ============================================================================
+# VPC Configuration
+# ============================================================================
+
+vpc_cidr = "10.0.0.0/16"
+
+# Public Subnets (NAT Gateways, ALB)
+public_subnet_cidrs = [
+  "10.0.1.0/24",   # AZ-a
+  "10.0.2.0/24"    # AZ-b
+]
+
+# Private Subnets (Application Servers)
+private_subnet_cidrs = [
+  "10.0.11.0/24",  # AZ-a
+  "10.0.12.0/24"   # AZ-b
+]
+
+# Database Subnets (RDS - Isolated)
+database_subnet_cidrs = [
+  "10.0.21.0/24",  # AZ-a
+  "10.0.22.0/24"   # AZ-b
+]
+
+availability_zones = ["a", "b"]
+
+# ============================================================================
+# EC2 Configuration
+# ============================================================================
+
+ec2_instance_type   = "t3.micro"    # For dev; use t3.small or larger for prod
+ec2_instance_count  = 2              # Number of application servers
+ec2_root_volume_size = 20            # Root volume size in GB
+
+# ============================================================================
+# RDS Database Configuration
+# ============================================================================
+
+rds_engine           = "postgres"   # Options: postgres, mysql
+rds_engine_version   = "14.7"       # Check AWS for latest supported versions
+rds_instance_class   = "db.t3.micro" # For dev; use db.t3.small or larger for prod
+rds_allocated_storage = 20           # Storage in GB
+
+# Database Credentials (IMPORTANT: Change these!)
+rds_username = "admin"
+rds_password = "MySecurePassword123!" # CHANGE THIS! Use strong passwords
+
+# Database Name
+db_name = "appdb"
+
+# Backup Configuration
+rds_backup_retention = 7   # Days to retain backups
+rds_multi_az         = true # Enable high availability
+
+# ============================================================================
+# Security Configuration
+# ============================================================================
+
+enable_vpc_flow_logs    = true  # Enable VPC Flow Logs for network monitoring
+enable_cloudwatch_logs  = true  # Enable CloudWatch Logs for EC2 instances
+
+# ============================================================================
+# Resource Tags
+# ============================================================================
+
+common_tags = {
+  "Project"     = "secure-infra"
+  "Environment" = "dev"
+  "ManagedBy"   = "Terraform"
+  "CreatedDate" = "2026-01-09"
+  "CostCenter"  = "Engineering"
+  "Owner"       = "DevOps Team"
+}
